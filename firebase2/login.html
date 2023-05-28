@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Create note</h1>
+    <form>
+        <input type="textarea" id="note" placeholder="Add your note...">
+        <button id="add">Add</button>
+    </form>
+
+    <button id="logout">Logout</button>
+    <script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
+    <script type="module">
+      //   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+      //   import {
+      //   getAuth,
+      //   createUserWithEmailAndPassword,
+      //   signInWithEmailAndPassword,
+      //   signOut
+      // } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js";
+
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyAl445jF8Az8EhRrlsQ4WSDbVH7nJEjS7k",
+        authDomain: "myfinalproject-a0afb.firebaseapp.com",
+        databaseURL: "https://myfinalproject-a0afb-default-rtdb.firebaseio.com",
+        projectId: "myfinalproject-a0afb",
+        storageBucket: "myfinalproject-a0afb.appspot.com",
+        messagingSenderId: "793389771559",
+        appId: "1:793389771559:web:dee6b8e2e20e953f9f5702",
+      };
+
+      firebase.initializeApp(firebaseConfig);
+
+      // Reference messages collection
+      var noteRef = firebase.database().ref("notes");
+
+      document.getElementById("add").addEventListener("click", addNote)
+
+      function addNote(e) {
+        e.preventDefault()
+
+        const note = document.getElementById("note").value
+
+        var newNoteRef = noteRef.push();
+        newNoteRef.set({
+            note: note
+        })
+
+        alert("Note is sent")
+        document.getElementById("note").value = ""
+
+      }
+
+      document.getElementById("logout").addEventListener("click", logout)
+
+      function logout() {
+        alert("Logged out")
+            window.location.href = "./index.html"
+
+        // signOut(auth).then(() => {
+        //     alert("Logged out")
+        //     window.location.href = "./index.html"
+        // }).catch((error) => {
+        //     alert(error)
+        // })
+      }
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+</head>
+<body>
+    <h1>
+        TODO list
+    </h1>
+
+    <form id="todoForm">
+        <label for="title">Title</label>
+        <input type="text" id="title" name="title">
+        <label for="desc">Description</label>
+        <input type="text" id="desc" name="desc">
+        <button type="submit">create</button>
+    </form>
+
+    <h3>List</h3>
+
+    <ul id="todolist">
+
+    </ul>
+
+
+    <script>
+        $(document).ready(function () {
+            const $todoform = $("#todoForm")
+            const $todolist = $("#todolist")
+            const $title = $("#title")
+            const $desc = $("#desc")
+
+            function fetchTodos () {
+                $.get("/todos")
+                .done((todos) => {
+                    $todolist.empty()
+                    todos.forEach(todo => {
+                        const $li = $("<li>").text(title + " " + desc)
+                        const $updateBtn = $("<button>").text("Update").data("id", todo._id).click(updateTodo)
+                        const $deleteBtn = $("<button>").text("Delete").data("id", todo._id).click(deleteTodo)
+                        $li.append($updateBtn, $deleteBtn)
+                        todolist.append($li)
+                    });
+                }) .fail(function() {
+                    console.error('Failed to fetch todos');
+                });
+            }
+            $todoform.on("submit", (event) => {
+                event.preventDefault()
+                const todotitle = $title.val()
+                const tododesc = $desc.val()
+                $.post("/todos", {
+                    title: todotitle,
+                    desc: tododesc
+                }).done(() => {
+                    alert("Todo created")
+                    $title.val("")
+                    $desc.val("")
+                    fetchTodos()
+                }).fail(() => {
+                    console.error('Failed to create todos');
+                })
+            })
+
+            function updateTodo () {
+                const id = $(this).data("id")
+                const newtitle = prompt("Enter new title: ")
+                if (newtitle) {
+                    $.ajax({
+                        url: `/todos/${id}`,
+                        method: "PUT",
+                        data: {title: newtitle},
+                        success: () => {
+                            fetchTodos()
+                        },
+                        error: () => {
+                            console.log("Error updating")
+                        }
+                    })
+                }
+            }
+
+            function deleteTodo () {
+                const id = $(this).data("id")
+                $.ajax({
+                    url: `/todos/${id}`,
+                    method: "DELETE",
+                    success: () => {
+                        fetchTodos()
+                    },
+                    error: () => {
+                        console.log("Error deleting")
+                    }
+                })
+            }
+
+        })
+    </script>
+</body>
+</html>

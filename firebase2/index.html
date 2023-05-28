@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Login form</h1>
+
+    <form>
+      <!-- <input type="text" id="username" placeholder="username"> -->
+      <input type="email" id="email" placeholder="email" />
+      <input type="password" id="password" placeholder="password" />
+      <button id="register">Register</button>
+      <button id="login">Login</button>
+    </form>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+      import {
+        getAuth,
+        createUserWithEmailAndPassword,
+        signInWithEmailAndPassword,
+        signOut,
+      } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyAl445jF8Az8EhRrlsQ4WSDbVH7nJEjS7k",
+        authDomain: "myfinalproject-a0afb.firebaseapp.com",
+        databaseURL: "https://myfinalproject-a0afb-default-rtdb.firebaseio.com",
+        projectId: "myfinalproject-a0afb",
+        storageBucket: "myfinalproject-a0afb.appspot.com",
+        messagingSenderId: "793389771559",
+        appId: "1:793389771559:web:dee6b8e2e20e953f9f5702",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app)
+
+      document.getElementById("register").addEventListener("click", signup);
+
+      function signup(e) {
+        e.preventDefault()
+        var email = document.getElementById("email").value
+        var password = document.getElementById("password").value
+
+        createUserWithEmailAndPassword(auth, email, password).then(() => {
+            alert("User registered")
+        }).catch((error) => {
+            alert(error)
+        })
+
+      }
+
+      document.getElementById("login").addEventListener("click", login);
+
+      function login(e) {
+        e.preventDefault()
+        var email = document.getElementById("email").value
+        var password = document.getElementById("password").value
+
+        signInWithEmailAndPassword(auth, email, password).then(() => {
+            alert("User registered")
+            window.location.href = "./login.html"
+        }).catch((error) => {
+            alert(error)
+        })
+
+      }
+
+
+    </script>
+  </body>
+</html>

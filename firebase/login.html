@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Firebase tutorial from Yashwant Pathak</title>
+    <link
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      rel="stylesheet"
+      integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="brand"><span>FireBase</span> Sample By Yashwant Pathak</h1>
+      <div class="wrapper">
+        <div class="company-info"></div>
+        <div class="contact">
+          <h3>Email Us</h3>
+          <div class="alert">Your message has been sent</div>
+          <form id="contactForm">
+            <p>
+              <label>Name</label>
+              <input type="text" name="name" id="name" required />
+            </p>
+            <p>
+              <label>Company</label>
+              <input type="text" name="company" id="company" />
+            </p>
+            <p>
+              <label>Email Address</label>
+              <input type="email" name="email" id="email" required />
+            </p>
+            <p>
+              <label>Phone Number</label>
+              <input type="text" name="phone" id="phone" />
+            </p>
+            <p class="full">
+              <label>Message</label>
+              <textarea name="message" rows="5" id="message"></textarea>
+            </p>
+            <p class="full">
+              <button type="submit">Submit</button>
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
+    <script>
+      //Initialize Firebase (ADD YOUR OWN DATA)
+      const firebaseConfig = {
+        apiKey: "AIzaSyAl445jF8Az8EhRrlsQ4WSDbVH7nJEjS7k",
+        authDomain: "myfinalproject-a0afb.firebaseapp.com",
+        databaseURL: "https://myfinalproject-a0afb-default-rtdb.firebaseio.com",
+        projectId: "myfinalproject-a0afb",
+        storageBucket: "myfinalproject-a0afb.appspot.com",
+        messagingSenderId: "793389771559",
+        appId: "1:793389771559:web:dee6b8e2e20e953f9f5702",
+      };
+
+      firebase.initializeApp(firebaseConfig);
+
+      // Reference messages collection
+      var messagesRef = firebase.database().ref("messages");
+
+      // Listen for form submit
+      document
+        .getElementById("contactForm")
+        .addEventListener("submit", submitForm);
+
+      // Submit form
+      function submitForm(e) {
+        e.preventDefault();
+
+        // Get values
+        var name = getInputVal("name");
+        var company = getInputVal("company");
+        var email = getInputVal("email");
+        var phone = getInputVal("phone");
+        var message = getInputVal("message");
+
+        // Save message
+        saveMessage(name, company, email, phone, message);
+
+        // Show alert
+        document.querySelector(".alert").style.display = "block";
+
+        // Hide alert after 3 seconds
+        setTimeout(function () {
+          document.querySelector(".alert").style.display = "none";
+        }, 3000);
+
+        // Clear form
+        document.getElementById("contactForm").reset();
+      }
+
+      // Function to get get form values
+      function getInputVal(id) {
+        return document.getElementById(id).value;
+      }
+
+      // Save message to firebase
+      function saveMessage(name, company, email, phone, message) {
+        var newMessageRef = messagesRef.push();
+        newMessageRef.set({
+          name: name,
+          company: company,
+          email: email,
+          phone: phone,
+          message: message,
+        });
+      }
+    </script>
+  </body>
+</html>
