@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>CRUD Operations</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <h1>CRUD Operations</h1>
+
+    <h2>Create Todo</h2>
+    <input type="text" id="title-input" placeholder="Title" />
+    <button id="create-btn">Create</button>
+
+    <h2>Update Todo</h2>
+    <input type="text" id="update-id-input" placeholder="Todo ID" />
+    <input type="text" id="update-title-input" placeholder="New Title" />
+    <input type="checkbox" id="update-completed-input" />
+    <label for="update-completed-input">Completed</label>
+    <button id="update-btn">Update</button>
+
+    <h2>Delete Todo</h2>
+    <input type="text" id="delete-id-input" placeholder="Todo ID" />
+    <button id="delete-btn">Delete</button>
+
+    <h2>Todo List</h2>
+    <ul id="todo-list"></ul>
+
+    <script>
+      // Helper function to create a list item for a todo
+      function createTodoListItem(todo) {
+        const listItem = $("<li>");
+        const checkbox = $("<input>")
+          .attr("type", "checkbox")
+          .prop("checked", todo.completed);
+        const title = $("<span>").text(todo.title);
+        listItem.append(checkbox, title);
+        return listItem;
+      }
+
+      // Get all todos and display them on the page
+      $.get("/todos", function (data) {
+        const todoList = $("#todo-list");
+        data.forEach(function (todo) {
+          const listItem = createTodoListItem(todo);
+          todoList.append(listItem);
+        });
+      });
+
+      // Create a new todo
+      $("#create-btn").click(function () {
+        const title = $("#title-input").val();
+        $.post("https://localhost:3000/todos",
+        { title: title },
+        function (todo) {
+          const listItem = createTodoListItem(todo);
+          $("#todo-list").append(listItem);
+        },
+        (error) => {
+              alert('Authentication failed.');
+            }
+            );
+      });
+
+      // Update a todo
+      $("#update-btn").click(function () {
+        const id = $("#update-id-input").val();
+        const title = $("#update-title-input").val();
+        const completed = $("#update-completed-input").is(":checked");
+        $.ajax({
+          url: "https://localhost:8000/todos/" + id,
+          method: "PUT",
+          data: { title: title, completed: completed },
+          success: function (todo) {
+            const listItem = createTodoListItem(todo);
+            $("#todo-list li")
+              .eq(id - 1)
+              .replaceWith(listItem);
+          },
+        });
+      });
+
+      // Delete a todo
+      $("#delete-btn").click(function () {
+        const id = $("#delete-id-input").val();
+        $.ajax({
+          url: "/todos/" + id,
+          method: "DELETE",
+          success: function () {
+            $("#todo-list li")
+              .eq(id - 1)
+              .remove();
+          },
+        });
+      });
+    </script>
+  </body>
+</html>
