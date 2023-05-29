@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-storage.js"></script>
+    <title>Document</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="firebase.js"></script>
+    <script type="text/javascript">
+        
+    </script>
+</head>
+<body>
+    <div class="inputDiv">
+        <textarea class="textarea" name="" id="noteInput" cols="50" rows="20" placeholder="Type Here"></textarea>
+        <button id="notesButton" onclick="addNote()">Add Your Note</button>
+    </div>
+    <div>
+        <p id="note"></p>
+        <p id="date"></p>
+    </div>
+    <script>
+    
+    import firebase from 'firebase/app';
+    import 'firebase/database';
+    
+    const firebaseConfig = {
+		    apiKey: "AIzaSyAv72dKYs4NrTxdfQ9NlaHOpp9RkrdGGag",
+		    authDomain: "myfirstapp-4eaaf.firebaseapp.com",
+		    databaseURL: "https://myfirstapp-4eaaf-default-rtdb.firebaseio.com",
+		    projectId: "myfirstapp-4eaaf",
+		    storageBucket: "myfirstapp-4eaaf.appspot.com",
+		    messagingSenderId: "429601288445",
+		    appId: "1:429601288445:web:d29082c680323da7894e94",
+		    measurementId: "G-05RC7YWM96"
+		  };
+  var app = firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
+    function addNote() {
+        const note = document.getElementById("noteInput").value;
+        var noteCollection = db.collection('Saved Notes');
+        document.getElementById("notesButton").addEventListener('click' , e => {
+            e.preventDefault();
+            noteCollection.doc("Notes").set({
+                Note: note,
+                Date_added: Date.now()
+            })
+            .then(()=> {alert('Note successfully added!!');})
+            .catch(error => {console.error(error.message)});
+            });
+    }
+    </script>
+</body>
+</html>
