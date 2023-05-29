@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { LoginComponentComponent } from "./login-component/login-component.component"
 
 @Component({
   selector: 'app-root',
@@ -7,7 +6,5 @@ import { LoginComponentComponent } from "./login-component/login-component.compo
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'angular-app';
+  title = 'login';
 }
-
-export class LoginComponentComponent
